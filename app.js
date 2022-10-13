@@ -8,12 +8,15 @@ const courses=[
     {id:3, name:'course3'},
 ]
 //Middlewares
-app.get('/api/courses',(req,res)=>{
-    res.send(courses)
-})
 app.use('/posts',()=>{
     console.log('This is a middleware running')
 })
+app.use(express.json())
+//Routes
+app.get('/api/courses',(req,res)=>{
+    res.send(courses)
+})
+
 app.get('/api/courses/:id',(req,res)=>{
  const course=courses.find(c=>c.id===parseInt(req.params.id))
  if(!course) res.status(404).send("This course ID was not found")
@@ -37,6 +40,15 @@ app.get('/posts',(req,res)=>{
 // })
 app.get('/api/courses/:year/:month',(req,res)=>{
     res.send(req.query)
+})
+//Post
+app.post('/api/courses',(req,res)=>{
+    const course={
+        id:courses.length+1,
+        name:req.body.name
+    };
+    courses.push(course)
+    res.send(course)
 })
 
 //Port
